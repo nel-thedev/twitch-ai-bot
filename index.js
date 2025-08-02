@@ -12,6 +12,11 @@ const userCooldown = 60 * 1000;
 let lastGlobalUse = 0;
 const userCooldowns = {};
 
+function truncateAtWord(text, maxLength = 300) {
+  if (text.length <= maxLength) return text;
+  return text.slice(0, maxLength).split(' ').slice(0, -1).join(' ') + '…';
+}
+
 const client = new tmi.Client({
   identity: {
     username: process.env.TWITCH_USERNAME,
@@ -57,11 +62,13 @@ client.on('message', async (channel, tags, message, self) => {
 
   try {
     const response = await openai.chat.completions.create({
-      model: 'gpt-4',
-      messages: [{ role: 'user', content: prompt }],
+      model: 'gpt-4.1-nano',
+      messages: [{ role: 'user', content: `Reply in under 300 characters: ${prompt}` }],
+      max_tokens: 100,
     });
 
-    const reply = response.choices[0].message.content.trim().slice(0, 300);
+    const raw = response.choices[0].message.content.trim();
+    const reply = truncateAtWord(raw, 300);
     client.say(channel, `@${user} ${reply}`);
   } catch (err) {
     console.error(err);
