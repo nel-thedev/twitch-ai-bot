@@ -1,0 +1,11 @@
+{
+    "name": "twitch-ai-bot",
+    "version": "1.0.0",
+    "main": "index.js",
+    "dependencies": {
+      "dotenv": "^16.0.3",
+      "openai": "^4.0.0",
+      "tmi.js": "^1.8.5"
+    }
+  }
+  
