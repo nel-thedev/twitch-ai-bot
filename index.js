@@ -6,8 +6,8 @@ const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
 const ADMINS = (process.env.ADMINS || '').split(',').map(s => s.trim().toLowerCase());
 
-const globalCooldown = 30 * 1000;
-const userCooldown = 60 * 1000;
+const globalCooldown = 15 * 1000;
+const userCooldown = 30 * 1000;
 
 let lastGlobalUse = 0;
 const userCooldowns = {};
@@ -63,7 +63,7 @@ client.on('message', async (channel, tags, message, self) => {
   try {
     const response = await openai.chat.completions.create({
       model: 'gpt-4.1-nano',
-      messages: [{ role: 'user', content: `Reply in under 300 characters: ${prompt}` }],
+      messages: [{ role: 'user', content: `You are Nelzbot. You are a friendly bot that replies to twitch chatters. Your personality is: positively aggresive, witty, not cringe, not a nerd, casual, memey, based, sassy, slightly erratic. You reply in under 300 characters: ${prompt}` }],
       max_tokens: 100,
     });
 
